@@ -1,0 +1,40 @@
+{
+  "name": "rpi-trigger",
+  "version": "0.1.0",
+  "description": "A system to measure temperature with the raspberry pi, with an email trigger. Configurable over a website hosted in the raspberry.",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dizzyrobin/rpi-trigger.git"
+  },
+  "keywords": [
+    "rasberry pi",
+    "trigger",
+    "email"
+  ],
+  "author": "dizzyrobin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dizzyrobin/rpi-trigger/issues"
+  },
+  "homepage": "https://github.com/dizzyrobin/rpi-trigger#readme",
+  "devDependencies": {
+    "xo": "^0.23.0"
+  },
+  "xo": {
+    "space": 2,
+    "rules": {
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ]
+    }
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "nodemailer": "^4.6.8"
+  }
+}
