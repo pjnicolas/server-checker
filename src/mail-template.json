@@ -1,0 +1,17 @@
+{
+  "subject": {
+    "error": "RPiG: ERROR",
+    "warning": "RPiG: AVISO",
+    "danger": "RPiG: PELIGRO",
+    "ok": "RPiG: OK"
+  },
+  "connection": {
+    "lost": "Error: Conexión perdida con los sensores",
+    "ok": "Conexión con los sensores recuperada"
+  },
+  "temperature": {
+    "warning": "Precaución: Niveles de temperatura moderadamente altos.",
+    "danger": "Peligro: Niveles de temperatura extremadamente altos.",
+    "restored": "Temperatura reestablecida: Los niveles de temperatura están dentro del rango seguro"
+  }
+}

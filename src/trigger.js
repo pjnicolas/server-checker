@@ -37,13 +37,13 @@ let sensorDataTimeout;
 // sensor sends any data.
 const sensorSignal = () => {
   if (currentSensorState === SensorState.CONNECTION_LOST) {
-    // TODO: Send mail: Connection recovered
+    sendMail(template.subject.ok, template.connection.ok);
   }
   currentSensorState = SensorState.CONNECTED;
   clearInterval(sensorDataTimeout);
   sensorDataTimeout = setTimeout(() => {
     currentSensorState = SensorState.CONNECTION_LOST;
-    // TODO: Send mail: Connection lost with sensor
+    sendMail(template.subject.error, template.connection.lost);
   }, sensorLostTimeout);
 }
 
@@ -74,16 +74,16 @@ app.get('/', (req, res) => {
     case TemperatureState.OK:
       if (temperature > temperatureDanger) {
         currentTemperatureState = TemperatureState.DANGER;
-        // TODO: Send danger mail
+        sendMail(template.subject.danger, template.temperature.danger);
       } else if (temperature > temperatureWarning) {
         currentTemperatureState = TemperatureState.WARNING;
-        // TODO: Send warning mail
+        sendMail(template.subject.warning, template.temperature.warning);
       }
       break;
     case TemperatureState.WARNING:
       if (temperature > temperatureDanger) {
         currentTemperatureState = TemperatureState.DANGER;
-        // TODO: Send danger mail
+        sendMail(template.subject.danger, template.temperature.danger);
       } else if (temperature < temperatureWarning) {
         currentTemperatureState = TemperatureState.OK_COOLING_DOWN;
         startCoolingDown();
@@ -99,15 +99,13 @@ app.get('/', (req, res) => {
       if (temperature > temperatureDanger) {
         currentTemperatureState = TemperatureState.DANGER;
         stopCoolingDown();
-        // TODO: Send danger mail
+        sendMail(template.subject.danger, template.temperature.danger);
       } else if (temperature > temperatureWarning) {
         stopCoolingDown();
         currentTemperatureState = TemperatureState.WARNING;
-      } else {
-        if (coolingDown === false) {
-          currentTemperatureState = TemperatureState.OK;
-          // TODO: Send OK mail.
-        }
+      } else if (coolingDown === false) {
+        currentTemperatureState = TemperatureState.OK;
+        sendMail(template.subject.ok, template.temperature.restored);
       }
       break;
     default:
