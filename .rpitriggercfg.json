@@ -1,17 +1,1 @@
-{
-    "sensor": {
-        "lostTimeout": 60
-    },
-    "temperature": {
-        "warning": 40,
-        "danger": 50,
-        "frozen": 0,
-        "coolDownTime": 60
-    },
-    "net": {
-        "port": {
-            "trigger": 7777,
-            "webserver": 80,
-        }
-    }
-}
+{"sensor":{"lostTimeout":"60"},"temperature":{"warning":"40","danger":"54","frozen":"0","coolDownTime":"60"},"net":{"port":{"trigger":7777,"webserver":3000}}}

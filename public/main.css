@@ -1,3 +1,54 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 body {
-  background-color: green;
+  background-color: white;
+}
+
+.datatable {
+  border-collapse: collapse;
+}
+
+.datatable td, .datatable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: right;
+}
+
+.datatable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.datatable tr:hover {
+  background-color: #ddd;
+}
+
+.datatable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #4CAF50;
+  color: white;
+}
+
+.alignLeft {
+  text-align: left !important;
+}
+
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #3C8F40;
 }

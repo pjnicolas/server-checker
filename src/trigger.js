@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 
 const {sendMail} = require('./mail');
@@ -62,13 +63,23 @@ const TemperatureState = {
 let currentTemperatureState = TemperatureState.OK;
 let currentSensorState = SensorState.CONNECTED;
 
+const saveSensorData = (temperature, humidity, electricalOutlet) => {
+  fs.writeFileSync('./sensor-data.json', JSON.stringify({
+    temperature,
+    humidity,
+    electricalOutlet,
+  }));
+};
+
 app.get('/', (req, res) => {
-  const {temperature, electricalOutlet} = req.query;
+  const {temperature, humidity, electricalOutlet} = req.query;
   if (typeof temperature !== 'number' || typeof electricalOutlet !== 'boolean') {
     throw new TypeError('The parameter "temperature" should be a number and "electricalOutlet" a boolean');
   }
 
   sensorSignal();
+
+  saveSensorData(temperature, humidity, electricalOutlet);
 
   switch (currentTemperatureState) {
     case TemperatureState.OK:

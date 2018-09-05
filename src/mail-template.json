@@ -6,7 +6,7 @@
     "ok": "RPiG: OK"
   },
   "connection": {
-    "lost": "Error: Conexión perdida con los sensores",
+    "lost": "Conexión perdida con los sensores",
     "ok": "Conexión con los sensores recuperada"
   },
   "temperature": {

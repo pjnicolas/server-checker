@@ -2,11 +2,101 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Sensor Configuration</title>
+  <title>Raspberry Pi Sensor Configuration</title>
   <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-  <script src="main.js"></script>
 </head>
 <body>
-  <h1>Hello world!</h1>
+  <h1>Raspberry Pi Sensor Configuration</h1>
+
+  <input type="submit" class="button" value="Factory reset"/>
+
+  <br />
+  <br />
+  <br />
+
+  <div id="content" hidden="true">
+
+    <div>
+      <div>Sensor data:</div>
+      <div>
+      </div>
+    </div>
+
+    <table class="datatable">
+    <thead>
+        <tr>
+          <th>Sensor</th>
+          <th>Value</th>
+        </tr>
+
+      </thead>
+      <tbody>
+          <tr>
+            <td>Temperature</td>
+            <td><span id="temperature">[LOADING...]</span>ºC</td>
+          </tr>
+          <tr>
+            <td>Humidity</td>
+            <td><span id="humidity">[LOADING...]</span>%</td>
+          </tr>
+      </tbody>
+    </table>
+
+    <br />
+    <br />
+
+    <form method="POST" action="/set">
+      <div>Change parameters:</div>
+      <table class="datatable">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th class="alignLeft">Value</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Temperature warning</td>
+            <td class="alignLeft"><input name="temperature-warning" id="temperature-warning" type="number"/> ºC</td>
+          </tr>
+          <tr>
+            <td>Temperature danger</td>
+            <td class="alignLeft"><input name="temperature-danger" id="temperature-danger" type="number"/> ºC</td>
+          </tr>
+          <tr>
+            <td>Temperature frozen</td>
+            <td class="alignLeft"><input name="temperature-frozen" id="temperature-frozen" type="number"/> ºC</td>
+          </tr>
+          <tr>
+            <td>Temperature cool down time</td>
+            <td class="alignLeft"><input name="temperature-coolDownTime" id="temperature-coolDownTime" type="number"/> secs</td>
+          </tr>
+          <tr>
+            <td>Sensor lost timeout</td>
+            <td class="alignLeft"><input name="sensor-lostTimeout" id="sensor-lostTimeout" type="number"/> secs</td>
+          </tr>
+          <tr>
+            <td>Email sender</td>
+            <td class="alignLeft"><input name="email-sender" id="email-sender" type="email"/></td>
+          </tr>
+          <tr>
+            <td>Email sender password</td>
+            <td class="alignLeft"><input name="email-password" id="email-password" type="password"/></td>
+          </tr>
+          <tr>
+            <td>Email receiver</td>
+            <td class="alignLeft"><input name="email-receiver" id="email-receiver" type="email"/></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <input type="submit" class="button" value="Submit"/>
+    </form>
+
+  </div>
+
+  <script src="main.js"></script>
 </body>
 </html>
