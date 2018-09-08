@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "xo",
-    "start": "node index.js"
+    "start": "node index.js",
+    "webserver": "node src/webserver.js",
+    "trigger": "node src/trigger.js",
+    "web-bundle": "rm dist/* && parcel build public/index.html",
+    "web-watch": "nodemon --watch public --exec \"npm run web-bundle\""
   },
   "repository": {
     "type": "git",
@@ -23,6 +27,8 @@
   },
   "homepage": "https://github.com/dizzyrobin/rpi-trigger#readme",
   "devDependencies": {
+    "nodemon": "^1.18.4",
+    "parcel": "^1.9.7",
     "xo": "^0.23.0"
   },
   "xo": {
@@ -37,6 +43,9 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "nodemailer": "^4.6.8"
+    "express-basic-auth": "^1.1.5",
+    "nodemailer": "^4.6.8",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0"
   }
 }

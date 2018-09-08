@@ -6,29 +6,13 @@ const template = require('./mail-template');
 const config = require('../.rpitriggercfg.json');
 
 const triggerPort = config.net.port.trigger;
+const temperatureOk = config.temperature.ok;
 const temperatureWarning = config.temperature.warning;
 const temperatureDanger = config.temperature.danger;
 const temperatureCoolDownTime = config.temperature.coolDownTime * 1000; // Transform seconds to milliseconds
 const sensorLostTimeout = config.sensor.lostTimeout;
 
 const app = express();
-
-// The temperature is "cooling down" if it was in a warning/danger level but now it's ok. If it's ok
-// for a long time, the current temperature state should change to TemperatureState.OK
-let coolingDown = false;
-let coolingDownTimeout;
-
-const startCoolingDown = () => {
-  coolingDown = true;
-  coolingDownTimeout = setTimeout(() => {
-    coolingDown = false;
-  }, temperatureCoolDownTime);
-};
-
-const stopCoolingDown = () => {
-  clearTimeout(coolingDownTimeout);
-  coolingDown = false;
-};
 
 // This holds a timeout id. The timeout should be reseted every time the sensor sends some data. If
 // the timeout is not reseted for a long time, the connection state should be marked as lost.
@@ -57,18 +41,16 @@ const TemperatureState = {
   OK: 1,                // The temperature is OK.
   WARNING: 2,           // The temperature is above the WARNING level.
   DANGER: 3,            // The temperature is above the DANGER level.
-  OK_COOLING_DOWN: 5,   // The temperature just decreased from WARNING/DANGER level to OK level.
 };
 
 let currentTemperatureState = TemperatureState.OK;
 let currentSensorState = SensorState.CONNECTED;
 
 const saveSensorData = (temperature, humidity, electricalOutlet) => {
-  fs.writeFileSync('./sensor-data.json', JSON.stringify({
-    temperature,
-    humidity,
-    electricalOutlet,
-  }));
+  const date = new Date();
+  const data = JSON.stringify({date, temperature, humidity, electricalOutlet});
+  fs.writeFileSync('./sensor-data.json', data);
+  fs.appendFileSync('./sensor-data-log.json', data);
 };
 
 app.get('/', (req, res) => {
@@ -95,26 +77,13 @@ app.get('/', (req, res) => {
       if (temperature > temperatureDanger) {
         currentTemperatureState = TemperatureState.DANGER;
         sendMail(template.subject.danger, template.temperature.danger);
-      } else if (temperature < temperatureWarning) {
-        currentTemperatureState = TemperatureState.OK_COOLING_DOWN;
-        startCoolingDown();
+      } else if (temperature < temperatureOk) {
+        currentTemperatureState = TemperatureState.OK;
+        sendMail(template.subject.ok, template.temperature.restored);
       }
       break;
-    case TemperatureState.DANGER:
-      if (temperature < temperatureWarning) {
-        currentTemperatureState = TemperatureState.OK_COOLING_DOWN;
-        startCoolingDown();
-      }
-      break;
-    case TemperatureState.OK_COOLING_DOWN:
-      if (temperature > temperatureDanger) {
-        currentTemperatureState = TemperatureState.DANGER;
-        stopCoolingDown();
-        sendMail(template.subject.danger, template.temperature.danger);
-      } else if (temperature > temperatureWarning) {
-        stopCoolingDown();
-        currentTemperatureState = TemperatureState.WARNING;
-      } else if (coolingDown === false) {
+      case TemperatureState.DANGER:
+      if (temperature < temperatureOk) {
         currentTemperatureState = TemperatureState.OK;
         sendMail(template.subject.ok, template.temperature.restored);
       }

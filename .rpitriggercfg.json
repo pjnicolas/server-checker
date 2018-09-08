@@ -1,1 +1,31 @@
-{"sensor":{"lostTimeout":"60"},"temperature":{"warning":"40","danger":"54","frozen":"0","coolDownTime":"60"},"net":{"port":{"trigger":7777,"webserver":3000}}}
+{
+  "sensor": {
+    "lostTimeout": "60"
+  },
+  "temperature": {
+    "ok": 25,
+    "warning": 28,
+    "danger": 38
+  },
+  "net": {
+    "port": {
+      "trigger": 7777,
+      "webserver": 3000
+    }
+  },
+  "email": {
+    "sender": "whatever@gmail.com",
+    "password": "1234admin",
+    "provider": "smtp.gmail.com",
+    "port": "587",
+    "secure": true,
+    "receivers": [{
+        "email": "pedrojavier.nz@gmail.com",
+        "subject": "RASPBERRY PI GUARDIAN"
+      }, {
+        "email": "yeahyeahyeah@gmail.com",
+        "subject": "Example of subject"
+      }
+    ]
+  }
+}

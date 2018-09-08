@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require('express');
+const basicAuth = require('express-basic-auth');
 const bodyParser = require('body-parser');
 const config = require('../.rpitriggercfg.json');
 
@@ -9,7 +10,14 @@ const app = express();
 
 const CONFIG_FILE = './.rpitriggercfg.json';
 
-app.use(express.static('public'));
+app.use(basicAuth({
+  users: {
+    admin: '1234',
+  },
+  challenge: true,
+}));
+
+app.use(express.static('dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -20,8 +28,7 @@ app.post('/set', (req, res) => {
   cfg.sensor.lostTimeout = body['sensor-lostTimeout'];
   cfg.temperature.warning = body['temperature-warning'];
   cfg.temperature.danger = body['temperature-danger'];
-  cfg.temperature.frozen = body['temperature-frozen'];
-  cfg.temperature.coolDownTime = body['temperature-coolDownTime'];
+  cfg.temperature.coolDownTime = body['temperature-ok'];
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg));
 
   res.redirect('/');
