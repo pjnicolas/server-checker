@@ -27,5 +27,11 @@
         "subject": "Example of subject"
       }
     ]
+  },
+  "ip": {
+    "static": true,
+    "address": "192.168.1.50",
+    "subnetMask": "255.255.0.0",
+    "gateway": "192.168.1.1"
   }
 }

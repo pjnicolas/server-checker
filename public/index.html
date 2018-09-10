@@ -58,6 +58,10 @@
 
         <tbody>
           <tr>
+            <td>Temperature ok</td>
+            <td class="alignLeft"><input name="temperature-ok" id="temperature-ok" type="number"/> ºC</td>
+          </tr>
+          <tr>
             <td>Temperature warning</td>
             <td class="alignLeft"><input name="temperature-warning" id="temperature-warning" type="number"/> ºC</td>
           </tr>
@@ -65,18 +69,12 @@
             <td>Temperature danger</td>
             <td class="alignLeft"><input name="temperature-danger" id="temperature-danger" type="number"/> ºC</td>
           </tr>
-          <tr>
-            <td>Temperature frozen</td>
-            <td class="alignLeft"><input name="temperature-frozen" id="temperature-frozen" type="number"/> ºC</td>
-          </tr>
-          <tr>
-            <td>Temperature cool down time</td>
-            <td class="alignLeft"><input name="temperature-coolDownTime" id="temperature-coolDownTime" type="number"/> secs</td>
-          </tr>
-          <tr>
+          <tr class="divider-down">
             <td>Sensor lost timeout</td>
             <td class="alignLeft"><input name="sensor-lostTimeout" id="sensor-lostTimeout" type="number"/> secs</td>
           </tr>
+
+
           <tr>
             <td>Email sender</td>
             <td class="alignLeft"><input name="email-sender" id="email-sender" type="email"/></td>
@@ -86,9 +84,40 @@
             <td class="alignLeft"><input name="email-password" id="email-password" type="password"/></td>
           </tr>
           <tr>
+            <td>Email provider</td>
+            <td class="alignLeft"><input name="email-provider" id="email-provider" type="url"/></td>
+          </tr>
+          <tr>
+            <td>Email port</td>
+            <td class="alignLeft"><input name="email-port" id="email-port" type="number"/></td>
+          </tr>
+          <tr>
+            <td>Email secure</td>
+            <td class="alignLeft"><input name="email-secure" id="email-secure" type="checkbox"/></td>
+          </tr>
+          <tr class="divider-down">
             <td>Email receiver</td>
             <td class="alignLeft"><input name="email-receiver" id="email-receiver" type="email"/></td>
           </tr>
+
+
+          <tr>
+            <td>Static IP</td>
+            <td class="alignLeft"><input name="ip-static" id="ip-static" type="checkbox"/></td>
+          </tr>
+          <tr class="disabled" id="tr-ip-address">
+            <td>IP Address</td>
+            <td class="alignLeft"><input disabled name="ip-address" id="ip-address" type="ip"/></td>
+          </tr>
+          <tr class="disabled" id="tr-ip-subnetMask">
+            <td>Subnet Mask</td>
+            <td class="alignLeft"><input disabled name="ip-subnetMask" id="ip-subnetMask" type="ip"/></td>
+          </tr>
+          <tr class="disabled" id="tr-ip-gateway">
+            <td>Gateway</td>
+            <td class="alignLeft"><input disabled name="ip-gateway" id="ip-gateway" type="ip"/></td>
+          </tr>
+
         </tbody>
       </table>
 

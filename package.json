@@ -6,10 +6,11 @@
   "scripts": {
     "test": "xo",
     "start": "node index.js",
-    "webserver": "node src/webserver.js",
     "trigger": "node src/trigger.js",
-    "web-bundle": "rm dist/* && parcel build public/index.html",
-    "web-watch": "nodemon --watch public --exec \"npm run web-bundle\""
+    "webserver": "node src/webserver.js",
+    "webserver-watch": "nodemon --watch src/webserver.js --exec \"npm run webserver\"",
+    "bundle": "rm -f dist/* && parcel build public/index.html",
+    "bundle-watch": "nodemon --watch public/index.html --watch public/main.css --watch public/main.js --exec \"npm run bundle\""
   },
   "repository": {
     "type": "git",

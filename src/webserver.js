@@ -51,3 +51,9 @@ app.get('/sensors', (req, res) => {
 app.listen(webserverPort, () => {
   console.log(`WebServer listening on port ${webserverPort}`);
 });
+
+app.get('/logout', (req, res) => {
+  req.auth = {};
+  console.log(req.auth);
+  res.redirect('/');
+});

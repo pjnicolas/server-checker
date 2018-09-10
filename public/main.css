@@ -52,3 +52,13 @@ body {
 .button:hover {
   background-color: #3C8F40;
 }
+
+.divider-down {
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+}
+
+.disabled {
+  opacity: 0.3;
+}
