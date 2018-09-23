@@ -21,7 +21,7 @@
     "secure": true,
     "receivers": [{
         "email": "pedrojavier.nz@gmail.com",
-        "subject": "RASPBERRY PI GUARDIAN"
+        "subject": "ServerChecker"
       }, {
         "email": "yeahyeahyeah@gmail.com",
         "subject": "Example of subject"
