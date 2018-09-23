@@ -7,9 +7,7 @@
     "test": "xo",
     "start": "node index.js",
     "webserver": "node src/webserver.js",
-    "trigger": "node src/trigger.js",
-    "web-bundle": "rm dist/* && parcel build public/index.html",
-    "web-watch": "nodemon --watch public --exec \"npm run web-bundle\""
+    "trigger": "node src/trigger.js"
   },
   "repository": {
     "type": "git",
