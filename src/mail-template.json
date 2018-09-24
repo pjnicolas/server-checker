@@ -1,10 +1,4 @@
 {
-  "subject": {
-    "error": "RPiG: ERROR",
-    "warning": "RPiG: AVISO",
-    "danger": "RPiG: PELIGRO",
-    "ok": "RPiG: OK"
-  },
   "connection": {
     "lost": "Conexión perdida con los sensores",
     "ok": "Conexión con los sensores recuperada"

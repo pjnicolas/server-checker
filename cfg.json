@@ -1,6 +1,6 @@
 {
   "sensor": {
-    "lostTimeout": "60"
+    "lostTimeout": 60
   },
   "temperature": {
     "ok": 25,

@@ -4,6 +4,7 @@ const express = require('express');
 const config = require('../cfg.json');
 const {sendMail} = require('./mail');
 const template = require('./mail-template');
+const type = require('./type');
 
 const triggerPort = config.net.port.trigger;
 const temperatureOk = config.temperature.ok;
@@ -12,24 +13,6 @@ const temperatureDanger = config.temperature.danger;
 const sensorLostTimeout = config.sensor.lostTimeout;
 
 const app = express();
-
-// This holds a timeout id. The timeout should be reseted every time the sensor sends some data. If
-// the timeout is not reseted for a long time, the connection state should be marked as lost.
-let sensorDataTimeout;
-
-// This function is useful for resetting the `sensorDataTimeout` timeout. Call it every time the
-// sensor sends any data.
-const sensorSignal = () => {
-  if (currentSensorState === SensorState.CONNECTION_LOST) {
-    sendMail(template.subject.ok, template.connection.ok);
-  }
-  currentSensorState = SensorState.CONNECTED;
-  clearInterval(sensorDataTimeout);
-  sensorDataTimeout = setTimeout(() => {
-    currentSensorState = SensorState.CONNECTION_LOST;
-    sendMail(template.subject.error, template.connection.lost);
-  }, sensorLostTimeout);
-}
 
 const SensorState = {
   CONNECTED: 1,         // The program is receiving data from sensors.
@@ -42,55 +25,85 @@ const TemperatureState = {
   DANGER: 3,            // The temperature is above the DANGER level.
 };
 
-let currentTemperatureState = TemperatureState.OK;
-let currentSensorState = SensorState.CONNECTED;
+let temperatureState = TemperatureState.OK;
+let sensorState = SensorState.CONNECTED;
+
+// This holds a timeout id. The timeout should be reseted every time the sensor sends some data. If
+// the timeout is not reseted for a long time, the connection state should be marked as lost.
+let sensorDataTimeout;
+
+// This function is useful for resetting the `sensorDataTimeout` timeout. Call it every time the
+// sensor sends any data.
+const sensorSignal = () => {
+  if (sensorState === SensorState.CONNECTION_LOST) {
+    sendMail(template.connection.ok);
+  }
+  sensorState = SensorState.CONNECTED;
+  clearInterval(sensorDataTimeout);
+  sensorDataTimeout = setTimeout(() => {
+    sensorState = SensorState.CONNECTION_LOST;
+    sendMail(template.connection.lost);
+  }, sensorLostTimeout);
+};
 
 const saveSensorData = (temperature, humidity, electricalOutlet) => {
   const date = new Date();
   const data = JSON.stringify({date, temperature, humidity, electricalOutlet});
   fs.writeFileSync('./sensor-data.json', data);
-  fs.appendFileSync('./sensor-data-log.json', data);
+  fs.appendFileSync('./sensor-data.log', data);
 };
 
 app.get('/', (req, res) => {
-  const {temperature, humidity, electricalOutlet} = req.query;
-  if (typeof temperature !== 'number' || typeof electricalOutlet !== 'boolean') {
-    throw new TypeError('The parameter "temperature" should be a number and "electricalOutlet" a boolean');
+  const {temperature, humidity, electricalOutlet} = req.query; // TODO: Change this to a POST json
+  if (!type.number(temperature)) {
+    res.sendStatus(400);
+    throw new TypeError('The "temperature" must be a number');
+  }
+
+  if (!type.boolean(electricalOutlet)) {
+    res.sendStatus(400);
+    throw new TypeError('The "electricalOutlet" must be a number');
+  }
+
+  if (!type.number(humidity)) {
+    res.sendStatus(400);
+    throw new TypeError('The "humidity" must be a number');
   }
 
   sensorSignal();
 
   saveSensorData(temperature, humidity, electricalOutlet);
 
-  switch (currentTemperatureState) {
+  switch (temperatureState) {
     case TemperatureState.OK:
       if (temperature > temperatureDanger) {
-        currentTemperatureState = TemperatureState.DANGER;
-        sendMail(template.subject.danger, template.temperature.danger);
+        temperatureState = TemperatureState.DANGER;
+        sendMail(template.temperature.danger);
       } else if (temperature > temperatureWarning) {
-        currentTemperatureState = TemperatureState.WARNING;
-        sendMail(template.subject.warning, template.temperature.warning);
+        temperatureState = TemperatureState.WARNING;
+        sendMail(template.temperature.warning);
       }
       break;
     case TemperatureState.WARNING:
       if (temperature > temperatureDanger) {
-        currentTemperatureState = TemperatureState.DANGER;
-        sendMail(template.subject.danger, template.temperature.danger);
+        temperatureState = TemperatureState.DANGER;
+        sendMail(template.temperature.danger);
       } else if (temperature < temperatureOk) {
-        currentTemperatureState = TemperatureState.OK;
-        sendMail(template.subject.ok, template.temperature.restored);
+        temperatureState = TemperatureState.OK;
+        sendMail(template.temperature.restored);
       }
       break;
-      case TemperatureState.DANGER:
+    case TemperatureState.DANGER:
       if (temperature < temperatureOk) {
-        currentTemperatureState = TemperatureState.OK;
-        sendMail(template.subject.ok, template.temperature.restored);
+        temperatureState = TemperatureState.OK;
+        sendMail(template.temperature.restored);
       }
       break;
     default:
       throw new Error('Unknown temperature state');
   }
-  res.send('');
+
+  res.sendStatus(200);
 });
 
 app.listen(triggerPort, () => {
