@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const config = require('../cfg.json');
 const {sendMail} = require('./mail');
@@ -13,6 +14,9 @@ const temperatureDanger = config.temperature.danger;
 const sensorLostTimeout = config.sensor.lostTimeout;
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 const SensorState = {
   CONNECTED: 1,         // The program is receiving data from sensors.
@@ -53,8 +57,9 @@ const saveSensorData = (temperature, humidity, electricalOutlet) => {
   fs.appendFileSync('./sensor-data.log', data);
 };
 
-app.get('/', (req, res) => {
-  const {temperature, humidity, electricalOutlet} = req.query; // TODO: Change this to a POST json
+app.post('/', (req, res) => {
+  const {body} = req;
+  const {temperature, humidity, electricalOutlet} = body;
   if (!type.number(temperature)) {
     res.sendStatus(400);
     throw new TypeError('The "temperature" must be a number');
