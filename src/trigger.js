@@ -1,15 +1,14 @@
 const fs = require('fs');
 const express = require('express');
 
+const config = require('../cfg.json');
 const {sendMail} = require('./mail');
 const template = require('./mail-template');
-const config = require('../.rpitriggercfg.json');
 
 const triggerPort = config.net.port.trigger;
 const temperatureOk = config.temperature.ok;
 const temperatureWarning = config.temperature.warning;
 const temperatureDanger = config.temperature.danger;
-const temperatureCoolDownTime = config.temperature.coolDownTime * 1000; // Transform seconds to milliseconds
 const sensorLostTimeout = config.sensor.lostTimeout;
 
 const app = express();

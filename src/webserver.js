@@ -2,13 +2,13 @@ const fs = require('fs');
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const bodyParser = require('body-parser');
-const config = require('../.rpitriggercfg.json');
+const config = require('../cfg.json');
 
 const webserverPort = config.net.port.webserver;
 
 const app = express();
 
-const CONFIG_FILE = './.rpitriggercfg.json';
+const CONFIG_FILE = './cfg.json';
 
 app.use(basicAuth({
   users: {

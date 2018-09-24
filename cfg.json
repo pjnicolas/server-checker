@@ -14,16 +14,15 @@
     }
   },
   "email": {
-    "sender": "whatever@gmail.com",
-    "password": "1234admin",
+    "sender": "pedrojavier.nz@gmail.com",
     "provider": "smtp.gmail.com",
-    "port": "587",
+    "port": 465,
     "secure": true,
     "receivers": [{
         "email": "pedrojavier.nz@gmail.com",
-        "subject": "ServerChecker"
+        "subject": "Server Checker"
       }, {
-        "email": "yeahyeahyeah@gmail.com",
+        "email": "pedrojavier.nz@gmail.com",
         "subject": "Example of subject"
       }
     ]

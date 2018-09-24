@@ -1,38 +1,46 @@
+require('dotenv').config(); // Load the .env file in order to get the password
 const nodemailer = require('nodemailer');
-const key = require('./mail-key.json');
+const config = require('../cfg.json');
 
-const transporter = nodemailer.createTransport({
-  host: 'gmail',
+const {email} = config;
+const emailPassword = process.env.EMAIL_PASSWORD;
+
+const serverConfig = {
+  host: email.provider,
+  port: email.port,
+  secure: email.secure,
   auth: {
-    user: key.email,
-    password: key.password,
+    user: email.sender,
+    pass: emailPassword,
   },
-});
-
-const mailOptions = {
-  from: key.email,
-  to: key.to,
-  subject: '',
-  text: '',
 };
 
-const sendMail = (subject, text) => {
-  if (typeof subject !== 'string' || typeof text !== 'string') {
-    throw new TypeError('The arguments must be strings');
+const transporter = nodemailer.createTransport(serverConfig);
+
+const sendMail = text => {
+  if (typeof text !== 'string') {
+    throw new TypeError('The argument must be a string');
   }
 
-  const newMailOptions = JSON.parse(JSON.stringify(mailOptions));
-  newMailOptions.subject = subject;
-  newMailOptions.text = text;
+  for (const receiver of email.receivers) {
+    const mailOptions = {
+      from: email.sender,
+      to: receiver.email,
+      subject: receiver.subject,
+      text,
+    };
 
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      return console.error(err);
-    }
+    console.log(mailOptions);
 
-    console.log('Message sent');
+    transporter.sendMail(mailOptions, (err, info) => {
+      if (err) {
+        return console.error(err); // TODO: Handle error
+      }
 
-  });
+      console.log('Message sent');
+    });
+  }
+
 };
 
 module.exports.sendMail = sendMail;
