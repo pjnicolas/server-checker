@@ -13,9 +13,10 @@ var showContent = () => {
 fetch(`http://${window.location.hostname}:3000/sensors`)
   .then(data => data.json())
   .then(data => {
-    const {temperature, humidity} = data;
+    const {temperature, humidity, electricalOutlet} = data;
     document.getElementById('temperature').innerHTML = temperature;
     document.getElementById('humidity').innerHTML = humidity;
+    document.getElementById('electricalOutlet').innerHTML = electricalOutlet;
     sensorsLoaded = true;
     showContent();
   }).catch(error => {
@@ -25,11 +26,13 @@ fetch(`http://${window.location.hostname}:3000/sensors`)
 fetch(`http://${window.location.hostname}:3000/cfg`)
   .then(data => data.json())
   .then(data => {
+    document.getElementById('temperature-ok').value = data.temperature.ok;
     document.getElementById('temperature-warning').value = data.temperature.warning;
     document.getElementById('temperature-danger').value = data.temperature.danger;
-    document.getElementById('temperature-frozen').value = data.temperature.frozen;
-    document.getElementById('temperature-coolDownTime').value = data.temperature.coolDownTime;
     document.getElementById('sensor-lostTimeout').value = data.sensor.lostTimeout;
+    document.getElementById('email-provider').value = data.email.provider;
+    document.getElementById('email-port').value = data.email.port;
+    document.getElementById('email-secure').value = data.email.secure;
     document.getElementById('email-sender').value = data.email.sender;
     document.getElementById('email-password').value = '';
     // TODO: document.getElementById('email-receiver').value =

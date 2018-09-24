@@ -1,4 +1,5 @@
 {
   "temperature": 26,
-  "humidity": 71
+  "humidity": 71,
+  "electricalOutlet": true
 }

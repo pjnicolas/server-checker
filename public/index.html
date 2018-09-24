@@ -39,6 +39,10 @@
             <td>Humidity</td>
             <td><span id="humidity">[LOADING...]</span>%</td>
           </tr>
+          <tr>
+            <td>Electrical Outlet</td>
+            <td><span id="electricalOutlet">[LOADING...]</span></td>
+          </tr>
       </tbody>
     </table>
 
@@ -58,6 +62,10 @@
 
         <tbody>
           <tr>
+            <td>Temperature ok</td>
+            <td class="alignLeft"><input name="temperature-ok" id="temperature-ok" type="number"/> ºC</td>
+          </tr>
+          <tr>
             <td>Temperature warning</td>
             <td class="alignLeft"><input name="temperature-warning" id="temperature-warning" type="number"/> ºC</td>
           </tr>
@@ -66,16 +74,25 @@
             <td class="alignLeft"><input name="temperature-danger" id="temperature-danger" type="number"/> ºC</td>
           </tr>
           <tr>
-            <td>Temperature frozen</td>
-            <td class="alignLeft"><input name="temperature-frozen" id="temperature-frozen" type="number"/> ºC</td>
-          </tr>
-          <tr>
-            <td>Temperature cool down time</td>
-            <td class="alignLeft"><input name="temperature-coolDownTime" id="temperature-coolDownTime" type="number"/> secs</td>
-          </tr>
-          <tr>
             <td>Sensor lost timeout</td>
             <td class="alignLeft"><input name="sensor-lostTimeout" id="sensor-lostTimeout" type="number"/> secs</td>
+          </tr>
+          <tr>
+            <td>Email provider</td>
+            <td class="alignLeft"><input name="email-provider" id="email-provider" type="text"/></td>
+          </tr>
+          <tr>
+            <td>Email port</td>
+            <td class="alignLeft"><input name="email-port" id="email-port" type="text"/></td>
+          </tr>
+          <tr>
+            <td>Email secure</td>
+            <td class="alignLeft">
+              <select name="email-secure" id="email-secure">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </td>
           </tr>
           <tr>
             <td>Email sender</td>
