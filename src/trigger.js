@@ -19,14 +19,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 const SensorState = {
-  CONNECTED: 1,         // The program is receiving data from sensors.
-  CONNECTION_LOST: 2,   // The program didn't receive dara from sensors for a long time.
+  CONNECTED: 1,
+  CONNECTION_LOST: 2,
 };
 
 const TemperatureState = {
-  OK: 1,                // The temperature is OK.
-  WARNING: 2,           // The temperature is above the WARNING level.
-  DANGER: 3,            // The temperature is above the DANGER level.
+  OK: 1,
+  WARNING: 2,
+  DANGER: 3,
 };
 
 let temperatureState = TemperatureState.OK;

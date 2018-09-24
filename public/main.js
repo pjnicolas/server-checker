@@ -1,3 +1,6 @@
+/* eslint-disable no-var */
+/* global window document fetch */
+
 var sensorsLoaded = false;
 var cfgLoaded = false;
 
@@ -27,9 +30,9 @@ fetch(`http://${window.location.hostname}:3000/cfg`)
     document.getElementById('temperature-frozen').value = data.temperature.frozen;
     document.getElementById('temperature-coolDownTime').value = data.temperature.coolDownTime;
     document.getElementById('sensor-lostTimeout').value = data.sensor.lostTimeout;
-    // document.getElementById('email-sender').value =
-    // document.getElementById('email-password').value =
-    // document.getElementById('email-receiver').value =
+    document.getElementById('email-sender').value = data.email.sender;
+    document.getElementById('email-password').value = '';
+    // TODO: document.getElementById('email-receiver').value =
     cfgLoaded = true;
     showContent();
   }).catch(error => {
