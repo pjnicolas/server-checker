@@ -83,6 +83,11 @@ app.get('/sensors', (req, res) => {
   res.send(sensorData);
 });
 
+app.get('/log', (req, res) => {
+  const log = fs.readFileSync('./sensor-data.log');
+  res.send(log);
+});
+
 app.listen(webserverPort, () => {
   console.log(`WebServer listening on port ${webserverPort}`);
 });

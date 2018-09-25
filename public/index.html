@@ -2,13 +2,19 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Raspberry Pi Sensor Configuration</title>
+  <title>Server Checker Configuration</title>
   <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
 </head>
 <body>
-  <h1>Raspberry Pi Sensor Configuration</h1>
+  <h1>Server Checker Configuration</h1>
 
-  <input type="submit" class="button" value="Factory reset"/>
+  <form action="/factory-reset">
+    <input type="submit" class="button" value="Factory reset"/>
+  </form>
+
+  <form action="/log">
+    <input type="submit" class="button" value="View log"/>
+  </form>
 
   <br />
   <br />
