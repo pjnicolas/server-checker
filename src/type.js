@@ -7,4 +7,17 @@ module.exports = {
   array: x => Array.isArray(x),
   null: x => x === undefined || x === null,
   boolean: x => x === true || x === false,
+  to: {
+    stringToBoolean: x => {
+      if (x === 'true') {
+        return true;
+      }
+
+      if (x === 'false') {
+        return false;
+      }
+
+      return x;
+    }
+  },
 };
