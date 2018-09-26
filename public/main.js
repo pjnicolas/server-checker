@@ -4,11 +4,23 @@
 var sensorsLoaded = false;
 var cfgLoaded = false;
 
-var showContent = () => {
+function showContent() {
   if (sensorsLoaded && cfgLoaded) {
     document.getElementById('content').hidden = false;
   }
-};
+}
+
+function receiversToString(receivers) {
+  return receivers.map(({email, subject}) => [email, subject].join(':')).join(';');
+}
+
+function parseReceivers(receivers) {
+  var tmp = receivers.split(';').map(e => e.trim().split(':').map(x => x.trim()));
+  return tmp.map(e => ({
+    email: e[0],
+    subject: e[1],
+  }));
+}
 
 fetch(`http://${window.location.hostname}:3000/sensors`)
   .then(data => data.json())
@@ -35,9 +47,26 @@ fetch(`http://${window.location.hostname}:3000/cfg`)
     document.getElementById('email-secure').value = data.email.secure;
     document.getElementById('email-sender').value = data.email.sender;
     document.getElementById('email-password').value = '';
-    // TODO: document.getElementById('email-receiver').value =
+    document.getElementById('email-receivers').value = receiversToString(data.email.receivers);
+
     cfgLoaded = true;
     showContent();
   }).catch(error => {
     console.error(error);
   });
+
+function validateForm() {
+  var receivers = document.forms.mainForm['email-receivers'].value;
+  receivers = parseReceivers(receivers);
+
+  for (var i = 0; i < receivers.length; i += 1) {
+    const r = receivers[i];
+    // TODO: Email regex
+    if (r.subject === undefined || r.email === undefined || r.email === "") {
+      alert('Invalid field "Email receivers". Please, check it and follow the pattern "peter@smith.com:subject; john@snow:subject2; duck@donald:subject3"');
+      return false;
+    }
+  }
+
+  return true;
+}

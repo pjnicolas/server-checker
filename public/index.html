@@ -8,6 +8,8 @@
 <body>
   <h1>Server Checker Configuration</h1>
 
+  <div>¡Atención! Esta página no soporta ninguna versión de Internet Explorer. Si es su caso, <a href="http://outdatedbrowser.com">actualice</a> a un navegador moderno antes de continuar.</div>
+
   <form action="/factory-reset">
     <input type="submit" class="button" value="Factory reset"/>
   </form>
@@ -49,13 +51,17 @@
             <td>Electrical Outlet</td>
             <td><span id="electricalOutlet">[LOADING...]</span></td>
           </tr>
+          <tr>
+            <td>Timestamp</td>
+            <td><span id="timestamp">[LOADING...]</span></td>
+          </tr>
       </tbody>
     </table>
 
     <br />
     <br />
 
-    <form method="POST" action="/set">
+    <form id="mainForm" method="POST" action="/set" onsubmit="return validateForm()">
       <div>Change parameters:</div>
       <table class="datatable">
         <thead>
@@ -111,8 +117,8 @@
             <td class="alignLeft"><input name="email-password" id="email-password" type="password"/></td>
           </tr>
           <tr>
-            <td>Email receiver</td>
-            <td class="alignLeft"><input name="email-receiver" id="email-receiver" type="email"/></td>
+            <td>Email receivers</td>
+            <td class="alignLeft"><input name="email-receivers" id="email-receivers" type="text"/></td>
           </tr>
 
         </tbody>

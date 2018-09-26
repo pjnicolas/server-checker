@@ -12,9 +12,27 @@ const app = express();
 const CONFIG_FILE = './cfg.json';
 const ENV_FILE = './.env';
 
+const parseReceivers = receivers => {
+  let tmp = receivers.split(';').map(e => e.trim().split(':').map(x => x.trim()));
+  tmp = tmp.map(e => ({
+    email: e[0],
+    subject: e[1],
+  }));
+
+  for (const t of tmp) {
+    const {email, subject} = t;
+    // TODO: Email regex
+    if (!(type.notEmptyString(email) && type.string(subject))) {
+      return undefined;
+    }
+  }
+
+  return tmp;
+};
+
 app.use(basicAuth({
   users: {
-    admin: '1234',
+    admin: '1234',  // TODO: Move this to a config file
   },
   challenge: true,
 }));
@@ -35,7 +53,7 @@ app.post('/set', (req, res) => {
   cfg.email.sender = body['email-sender'];
   cfg.email.port = Number(body['email-port']);
   cfg.email.secure = type.to.stringToBoolean(body['email-secure']);
-  // TODO Receivers
+  cfg.email.receivers = parseReceivers(body['email-receivers']);
 
   const password = body['email-password'];
 
@@ -46,7 +64,8 @@ app.post('/set', (req, res) => {
       type.string(cfg.email.provider) &&
       type.string(cfg.email.sender) &&
       type.number(cfg.email.port) &&
-      type.boolean(cfg.email.secure))) {
+      type.boolean(cfg.email.secure) &&
+      type.array(cfg.email.receivers))) {
     res.send('Invalid parameters');
     return;
   }
