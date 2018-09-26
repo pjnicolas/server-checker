@@ -1,11 +1,11 @@
 {
   "connection": {
-    "lost": "Conexión perdida con los sensores",
-    "ok": "Conexión con los sensores recuperada"
+    "lost": "Conexión perdida con los sensores\n",
+    "ok": "Conexión con los sensores recuperada\n"
   },
   "temperature": {
-    "warning": "Precaución: Niveles de temperatura moderadamente altos.",
-    "danger": "Peligro: Niveles de temperatura extremadamente altos.",
-    "restored": "Temperatura reestablecida: Los niveles de temperatura están dentro del rango seguro"
+    "warning": "Precaución: Niveles de temperatura moderadamente altos.\n",
+    "danger": "Peligro: Niveles de temperatura extremadamente altos.\n",
+    "restored": "Temperatura reestablecida: Los niveles de temperatura están dentro del rango seguro\n"
   }
 }
