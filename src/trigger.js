@@ -43,23 +43,27 @@ const sensorSignal = () => {
     sendMail(template.connection.ok);
   }
   sensorState = SensorState.CONNECTED;
-  clearInterval(sensorDataTimeout);
+  clearTimeout(sensorDataTimeout);
   sensorDataTimeout = setTimeout(() => {
     sensorState = SensorState.CONNECTION_LOST;
     sendMail(template.connection.lost);
-  }, sensorLostTimeout);
+  }, sensorLostTimeout * 1000);
 };
 
 const saveSensorData = (temperature, humidity, electricalOutlet) => {
-  const date = new Date();
-  const data = JSON.stringify({date, temperature, humidity, electricalOutlet});
+  const date = (new Date()).toString();
+  const data = JSON.stringify({date, temperature, humidity, electricalOutlet}) + '\n';
   fs.writeFileSync('./sensor-data.json', data);
   fs.appendFileSync('./sensor-data.log', data);
 };
 
+const statusInform = (temperature, humidity, electricalOutlet) => {
+  return `\nTemperature: ${temperature}ºC\nHumidity: ${humidity}%\nElectrical outlet: ${electricalOutlet}\n`;
+};
+
 app.post('/', (req, res) => {
-  const {body} = req;
-  const {temperature, humidity, electricalOutlet} = body;
+  const {temperature, humidity, electricalOutlet} = req.body;
+  console.log(req.body);
   if (!type.number(temperature)) {
     res.sendStatus(400);
     throw new TypeError('The "temperature" must be a number');
@@ -83,25 +87,25 @@ app.post('/', (req, res) => {
     case TemperatureState.OK:
       if (temperature > temperatureDanger) {
         temperatureState = TemperatureState.DANGER;
-        sendMail(template.temperature.danger);
+        sendMail(template.temperature.danger + statusInform(temperature, humidity, electricalOutlet));
       } else if (temperature > temperatureWarning) {
         temperatureState = TemperatureState.WARNING;
-        sendMail(template.temperature.warning);
+        sendMail(template.temperature.warning + statusInform(temperature, humidity, electricalOutlet));
       }
       break;
     case TemperatureState.WARNING:
       if (temperature > temperatureDanger) {
         temperatureState = TemperatureState.DANGER;
-        sendMail(template.temperature.danger);
+        sendMail(template.temperature.danger + statusInform(temperature, humidity, electricalOutlet));
       } else if (temperature < temperatureOk) {
         temperatureState = TemperatureState.OK;
-        sendMail(template.temperature.restored);
+        sendMail(template.temperature.restored + statusInform(temperature, humidity, electricalOutlet));
       }
       break;
     case TemperatureState.DANGER:
       if (temperature < temperatureOk) {
         temperatureState = TemperatureState.OK;
-        sendMail(template.temperature.restored);
+        sendMail(template.temperature.restored + statusInform(temperature, humidity, electricalOutlet));
       }
       break;
     default:
