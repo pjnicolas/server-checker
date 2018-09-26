@@ -7,7 +7,8 @@
     "test": "xo",
     "start": "node index.js",
     "webserver": "node src/webserver.js",
-    "trigger": "node src/trigger.js"
+    "trigger": "node src/trigger.js",
+    "reset-data": "echo > sensor-data.log; echo {temperature: 0, humidity: 0, electricalOutlet: 0} > sensor-data.json"
   },
   "repository": {
     "type": "git",
