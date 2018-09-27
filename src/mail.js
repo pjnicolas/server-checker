@@ -24,6 +24,8 @@ const loadConfig = paramConfig => {
     throw new TypeError('"paramConfig" must be an object');
   }
 
+  console.log()
+
   if (!(type.notEmptyString(config.provider) &&
       type.notEmptyString(config.sender) &&
       type.notEmptyString(config.password) &&
@@ -61,8 +63,9 @@ const loadTransporter = config => {
 /**
  * Send an email.
  *
- * @param {string} text The body of the email
- * @param {object} config The config of the email
+ * @param {string} text The body of the email.
+ * @param {object} config The config of the email. It is NOT recommended to omit this param because
+ * of the JSON file loading with require(...).
  *
  * @returns {([Promise]|false)} False if the there was an error establishing the connection with
  * the email provider. Otherwise, an array of promises, one per receiver.

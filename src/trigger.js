@@ -2,16 +2,53 @@ const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const config = require('../cfg.json');
 const {sendMail} = require('./mail');
 const template = require('./mail-template');
 const type = require('./type');
 
-const triggerPort = config.net.port.trigger;
-const temperatureOk = config.temperature.ok;
-const temperatureWarning = config.temperature.warning;
-const temperatureDanger = config.temperature.danger;
-const sensorLostTimeout = config.sensor.lostTimeout;
+const CONFIG_FILE = './cfg.json';
+const ENV_FILE = './.env';
+
+let triggerPort;
+let temperatureOk;
+let temperatureWarning;
+let temperatureDanger;
+let sensorLostTimeout;
+let configEmail;
+
+const loadConfig = () => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(CONFIG_FILE, {encoding: 'utf8'}, (err, data) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      // Get the email password
+      fs.readFile(ENV_FILE, {encoding: 'utf8'}, (err, env) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        const delimiterCharacter = '=';
+        env = env.split(delimiterCharacter);
+        env.shift();
+        const emailPassword = env.join(delimiterCharacter);
+
+        const config = JSON.parse(data);
+        triggerPort = config.net.port.trigger;
+        temperatureOk = config.temperature.ok;
+        temperatureWarning = config.temperature.warning;
+        temperatureDanger = config.temperature.danger;
+        sensorLostTimeout = config.sensor.lostTimeout;
+        configEmail = config.email;
+        configEmail.password = emailPassword;
+        resolve();
+      });
+    });
+  });
+};
 
 const app = express();
 
@@ -40,13 +77,13 @@ let sensorDataTimeout;
 // sensor sends any data.
 const sensorSignal = () => {
   if (sensorState === SensorState.CONNECTION_LOST) {
-    sendMail(template.connection.ok);
+    sendMail(template.connection.ok, configEmail);
   }
   sensorState = SensorState.CONNECTED;
   clearTimeout(sensorDataTimeout);
   sensorDataTimeout = setTimeout(() => {
     sensorState = SensorState.CONNECTION_LOST;
-    sendMail(template.connection.lost);
+    sendMail(template.connection.lost, configEmail);
   }, sensorLostTimeout * 1000);
 };
 
@@ -87,25 +124,25 @@ app.post('/', (req, res) => {
     case TemperatureState.OK:
       if (temperature > temperatureDanger) {
         temperatureState = TemperatureState.DANGER;
-        sendMail(template.temperature.danger + statusInform(temperature, humidity, electricalOutlet));
+        sendMail(template.temperature.danger + statusInform(temperature, humidity, electricalOutlet), configEmail);
       } else if (temperature > temperatureWarning) {
         temperatureState = TemperatureState.WARNING;
-        sendMail(template.temperature.warning + statusInform(temperature, humidity, electricalOutlet));
+        sendMail(template.temperature.warning + statusInform(temperature, humidity, electricalOutlet), configEmail);
       }
       break;
     case TemperatureState.WARNING:
       if (temperature > temperatureDanger) {
         temperatureState = TemperatureState.DANGER;
-        sendMail(template.temperature.danger + statusInform(temperature, humidity, electricalOutlet));
+        sendMail(template.temperature.danger + statusInform(temperature, humidity, electricalOutlet), configEmail);
       } else if (temperature < temperatureOk) {
         temperatureState = TemperatureState.OK;
-        sendMail(template.temperature.restored + statusInform(temperature, humidity, electricalOutlet));
+        sendMail(template.temperature.restored + statusInform(temperature, humidity, electricalOutlet), configEmail);
       }
       break;
     case TemperatureState.DANGER:
       if (temperature < temperatureOk) {
         temperatureState = TemperatureState.OK;
-        sendMail(template.temperature.restored + statusInform(temperature, humidity, electricalOutlet));
+        sendMail(template.temperature.restored + statusInform(temperature, humidity, electricalOutlet), configEmail);
       }
       break;
     default:
@@ -115,6 +152,21 @@ app.post('/', (req, res) => {
   res.sendStatus(200);
 });
 
-app.listen(triggerPort, () => {
-  console.log(`TriggerServer listening on port ${triggerPort}`);
+app.post('/reload', (req, res) => {
+  loadConfig()
+    .then(() => {
+      res.sendStatus(200);
+    }).catch(error => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 });
+
+loadConfig()
+  .then(() => {
+    app.listen(triggerPort, () => {
+      console.log(`TriggerServer listening on port ${triggerPort}`);
+    });
+  }).catch(error => {
+    throw error;
+  });

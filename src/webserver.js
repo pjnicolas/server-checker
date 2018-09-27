@@ -2,10 +2,12 @@ const fs = require('fs');
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const bodyParser = require('body-parser');
+const fetch = require('node-fetch');
 const config = require('../cfg.json');
 const type = require('./type');
 
 const webserverPort = config.net.port.webserver;
+const triggerPort = config.net.port.trigger;
 
 const app = express();
 
@@ -84,7 +86,13 @@ app.post('/set', (req, res) => {
   }
 
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg));
-  res.redirect('/');
+  fetch(`http://localhost:${triggerPort}/reload`, {method: 'POST'})
+    .then(() => {
+      res.redirect('/');
+    }).catch(error => {
+      console.error(error);
+      res.send('Error 500: Couldn\'t reload trigger server');
+    });
 });
 
 app.get('/cfg', (req, res) => {
