@@ -25,10 +25,11 @@ function parseReceivers(receivers) {
 fetch(`http://${window.location.hostname}:3000/sensors`)
   .then(data => data.json())
   .then(data => {
-    const {temperature, humidity, electricalOutlet} = data;
+    const {temperature, humidity, electricalOutlet, timestamp} = data;
     document.getElementById('temperature').innerHTML = temperature;
     document.getElementById('humidity').innerHTML = humidity;
     document.getElementById('electricalOutlet').innerHTML = electricalOutlet;
+    document.getElementById('timestamp').innerHTML = timestamp;
     sensorsLoaded = true;
     showContent();
   }).catch(error => {

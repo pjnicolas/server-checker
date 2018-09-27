@@ -88,8 +88,8 @@ const sensorSignal = () => {
 };
 
 const saveSensorData = (temperature, humidity, electricalOutlet) => {
-  const date = (new Date()).toString();
-  const data = JSON.stringify({date, temperature, humidity, electricalOutlet}) + '\n';
+  const timestamp = (new Date()).toString();
+  const data = JSON.stringify({timestamp, temperature, humidity, electricalOutlet}) + '\n';
   fs.writeFileSync('./sensor-data.json', data);
   fs.appendFileSync('./sensor-data.log', data);
 };
