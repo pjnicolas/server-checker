@@ -12,21 +12,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dizzyrobin/rpi-trigger.git"
+    "url": "git+https://github.com/dizzyrobin/server-checker.git"
   },
   "keywords": [
     "rasberry pi",
     "trigger",
     "email",
+    "temperature",
+    "humidity",
     "server",
     "checker"
   ],
   "author": "dizzyrobin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dizzyrobin/rpi-trigger/issues"
+    "url": "https://github.com/dizzyrobin/server-checker/issues"
   },
-  "homepage": "https://github.com/dizzyrobin/rpi-trigger#readme",
+  "homepage": "https://github.com/dizzyrobin/server-checker#readme",
   "devDependencies": {
     "nodemon": "^1.18.4",
     "parcel": "^1.9.7",
