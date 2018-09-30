@@ -8,6 +8,8 @@
     "start": "node index.js",
     "webserver": "node src/webserver.js",
     "trigger": "node src/trigger.js",
+    "forever-webserver": "forever src/webserver.js > webserver.log 2> webserver.err",
+    "forever-trigger": "forever src/trigger.js > trigger.log 2> trigger.err",
     "reset-data": "echo > sensor-data.log; echo {temperature: 0, humidity: 0, electricalOutlet: 0, timestamp: 0} > sensor-data.json"
   },
   "repository": {
@@ -48,6 +50,7 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-basic-auth": "^1.1.5",
+    "forever": "^0.15.3",
     "node-fetch": "^2.2.0",
     "nodemailer": "^4.6.8",
     "react": "^16.5.0",
