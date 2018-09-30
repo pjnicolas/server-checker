@@ -3,7 +3,7 @@ Description=TriggerServer
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/npm run forever-trigger
+ExecStart=/usr/bin/npm run forever-trigger
 WorkingDirectory=/home/pi/server-checker
 StandardOutput=inherit
 StandardError=inherit

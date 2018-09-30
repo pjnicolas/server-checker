@@ -3,7 +3,7 @@ Description=WebServer
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/npm run forever-webserver
+ExecStart=/usr/bin/npm run forever-webserver
 WorkingDirectory=/home/pi/server-checker
 StandardOutput=inherit
 StandardError=inherit
