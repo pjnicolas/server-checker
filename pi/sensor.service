@@ -1,9 +1,9 @@
 [Unit]
-Description=WebServer
+Description=Sensors
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/npm run forever-webserver
+ExecStart=/usr/bin/python src/sensor.py
 WorkingDirectory=/home/pi/server-checker
 StandardOutput=inherit
 StandardError=inherit
